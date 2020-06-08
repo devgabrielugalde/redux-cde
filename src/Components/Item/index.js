@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image';
+import './style.css';
 
 const ButtonContent = (params) => {
     return (
@@ -14,6 +15,36 @@ const ButtonContent = (params) => {
             </div>
         </div>
     )
+}
+
+function switchStatus (status) {
+    
+    let res;
+    
+    switch (status) {
+        case 'A1':
+            res = 'Separar';
+            break;
+
+        case 'A2':
+            res = 'Separado';
+            break;
+        
+        case 'A3':
+            res = 'Entregar';
+            break;
+
+        default:
+            res = 'Separar';
+            break;
+    }
+
+    return res;
+    
+}
+
+function acaoProduto (status) {
+    console.log(status);
 }
 
 export default function Item (props) {
@@ -33,11 +64,18 @@ export default function Item (props) {
                 <Modal.Body>
                     Olá, esse é o produto do {props.cliente}.<br></br>
                     Ele comprou um {props.descricao}<br></br>
+                    {props.id_bopis}
                     <Image alt={props.descricao} src={props.url} fluid />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShow(false)}>
-                        Entregar
+                    <Button variant="secondary" onClick={
+                        () => {
+                            setShow(false);
+                            acaoProduto(props.status);
+                        }}>
+                    {
+                        switchStatus(props.status)
+                    }
                     </Button>
                 </Modal.Footer>
             </Modal>

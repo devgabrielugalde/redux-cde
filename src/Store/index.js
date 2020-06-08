@@ -3,8 +3,7 @@ import { createStore } from 'redux';
 const INITIAL_STATE = {
     spinVisible: true,
     modalShow: false,
-    activeItens: [],
-    pendingItens: [],
+    itens: [],
     toastShow: false
 }
 
@@ -14,8 +13,7 @@ function reducer (state = INITIAL_STATE, action) {
         return {
             ...state,
             spinVisible: false,
-            activeItens: action.activeItens,
-            pendingItens: action.pendingItens
+            itens: action.itens
         };
     } else if (action.type === 'TOGGLE_TOAST') {
         return {

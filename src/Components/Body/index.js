@@ -7,69 +7,69 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import TitleItemBox from "../TitleItemBox/index";
 import Spin from '../Spin/index';
-import ActiveItem from '../ActiveItem/index';
-import PendingItem from '../PendingItem/index';
+import Item from '../Item/index';
 import BarcodeReader from '../Scanner/index';
 import Toaster from '../Toast/index';
 
-function setItens (activeItens, pendingItens) {
+function setItens (itens) {
     return {
         type: 'SET_ITENS',
-        activeItens: activeItens,
-        pendingItens: pendingItens
+        itens: itens
     }
 }
 
-const Body = ({ activeItens, pendingItens, props, dispatch }) => {    
+const Body = ({ state, props, dispatch }) => {    
 
     useEffect(() => {
 
-        fetch(`http://localhost:9000/${props.content}`).then(results => results.json()).then(data => {
-            let arrActiveItens = [];
-            let arrPendingItens = [];
+        fetch(`http://localhost:9000/${props.content}?loja=${props.loja}`).then(results => results.json()).then(data => {
+            let itens = [];
             let index = 0;
             data.map((item) => {
-                let auxData = new Date(item.data);
-                if (auxData.getDay() === new Date().getDay()) {
-                    arrActiveItens.push({index: index, id_item: item._id, ean: item.ean, cliente: item.cliente, descricao: item.descricao_produto, url: item.url});
-                } else {
-                    arrPendingItens.push({index: index, id_item: item._id, ean: item.ean, cliente: item.cliente, descricao: item.descricao_produto, url: item.url});
-                }
+                itens.push({index: index, item});
                 index += 1;
                 return item
             });
-            dispatch(setItens(arrActiveItens, arrPendingItens))
+            dispatch(setItens(itens))
         });
     }, [])
     
     return (
         <Container fluid>
-        <Row>
-            <Col md={8}>
-                <TitleItemBox title={'Entregas'} qtd={activeItens.length}/>
-                <ActiveItem list={activeItens}/>
-            </Col>
-            <Col md={4}>
-                <TitleItemBox title={'Notas Pendentes'} qtd={pendingItens.length}/>
-                <PendingItem/>
-            </Col>
-        </Row>
-        <Row className="spin-row">
-            <Spin/>
-        </Row>
-        <Row>
-            <BarcodeReader/>
-        </Row>
-        <Row>
-            <Toaster/>
-        </Row>
-    </Container>
+            <Row>
+                <Col md={12}>
+                    <TitleItemBox title={'Bopis'} qtd={state.itens.length}/>
+                    {
+                        state.itens.map((row) => {
+                            return <Item
+                                        key             ={row.index} 
+                                        paramModalShow  ={state.modalShow} 
+                                        index           ={row.index} 
+                                        id_bopis        ={row.item.ID_BOPIS} 
+                                        url             ={row.item.URL} 
+                                        cliente         ={row.item.NOME} 
+                                        descricao       ={row.item.DESCRICAO}
+                                        status          ={row.item.STATUS_PEDIDO_ALMOX}>
+                                    </Item>
+                        })
+                    }
+                </Col>
+            </Row>
+            <Row className="spin-row">
+                <Spin/>
+            </Row>
+            <Row>
+                <BarcodeReader/>
+            </Row>
+            <Row>
+                <Toaster/>
+            </Row>
+        </Container>
     );
 };
 
 const mapStateToProps = (state, props) => ({
-    activeItens: state.activeItens,
-    pendingItens: state.pendingItens,
+    state: state,
     props: props
 })
 

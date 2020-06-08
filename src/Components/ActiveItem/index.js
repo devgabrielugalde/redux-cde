@@ -6,7 +6,7 @@ import Item from '../Item/index';
 const ActiveItem = ({ state }) => {
 
     return (
-        state.activeItens.map((item) => {
+        state.itens.map((item) => {
             return <Item key={item.index} paramModalShow={state.modalShow} index={item.index} url={item.url} cliente={item.cliente} descricao={item.descricao}/>
         })
     )

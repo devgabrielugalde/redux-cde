@@ -1,0 +1,50 @@
+.pendingItem {
+    width: 100%;
+    margin: 10px 0px;
+    color: #000000;
+    background: #ffffff;
+    border: 2px solid #000000;
+    height: 70px;
+}
+
+.pendingItem:hover {
+    background: #808080;
+    border: 2px solid #808080;
+    color: #000000;
+}
+
+.pendingItem:focus {
+    background: #808080;
+    border: 2px solid #808080;
+    color: #000000;
+    box-shadow: none;
+}
+
+.buttonContent {
+    display: flex;
+    justify-content: space-between;
+}
+
+.imgbuttonContent {
+    width: 5%;
+}
+
+.imgbuttonContent img {
+    width: 50px;
+    height: auto;
+}
+
+.buttonContentDescription {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.btn-info:not(:disabled):not(.disabled).active, .btn-info:not(:disabled):not(.disabled):active, .show>.btn-info.dropdown-toggle {
+    color: #000000;
+    background-color: #808080;
+    border-color: #808080;
+}
