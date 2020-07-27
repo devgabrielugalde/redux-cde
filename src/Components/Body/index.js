@@ -18,19 +18,35 @@ function setItens (itens) {
     }
 }
 
-const Body = ({ state, props, dispatch }) => {    
+const Body = ({ state, props, dispatch }) => {
 
     useEffect(() => {
 
-        fetch(`http://localhost:9000/${props.content}?loja=${props.loja}`).then(results => results.json()).then(data => {
-            let itens = [];
-            let index = 0;
-            data.map((item) => {
-                itens.push({index: index, item});
-                index += 1;
-                return item
+        console.log(process.env.REACT_APP_VAR_TEST)
+
+        let opt = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8' 
+            },
+            body: JSON.stringify({user: "gabriel",pwd: "bemol"})
+        }
+
+        fetch(`http://localhost:9000/login`, opt).then(results => results.json()).then(async data => {
+            var myHeaders = new Headers();
+        
+            myHeaders.append("x-access-token", data.token);
+
+            fetch(`http://localhost:9000/${props.content}`, { headers: myHeaders }).then(results => results.json()).then(data => {
+                let itens = [];
+                let index = 0;
+                data.map((item) => {
+                    itens.push({index: index, item});
+                    index += 1;
+                    return item
+                });
+                dispatch(setItens(itens))
             });
-            dispatch(setItens(itens))
         });
     }, [])
     
@@ -38,18 +54,18 @@ const Body = ({ state, props, dispatch }) => {
         <Container fluid>
             <Row>
                 <Col md={12}>
-                    <TitleItemBox title={'Bopis'} qtd={state.itens.length}/>
+                    <TitleItemBox title={'Entregas'} qtd={state.itens.length}/>
                     {
                         state.itens.map((row) => {
                             return <Item
-                                        key             ={row.index} 
-                                        paramModalShow  ={state.modalShow} 
-                                        index           ={row.index} 
-                                        id_bopis        ={row.item.ID_BOPIS} 
-                                        url             ={row.item.URL} 
-                                        cliente         ={row.item.NOME} 
-                                        descricao       ={row.item.DESCRICAO}
-                                        status          ={row.item.STATUS_PEDIDO_ALMOX}>
+                                        key             = {row.index} 
+                                        paramModalShow  = {state.modalShow} 
+                                        index           = {row.index} 
+                                        id_bopis        = {row.item.ID_BOPIS} 
+                                        url             = {row.item.url} 
+                                        cliente         = {row.item.cliente} 
+                                        descricao       = {row.item.descricao_produto}
+                                        status          = {row.item.STATUS_PEDIDO_ALMOX}>
                                     </Item>
                         })
                     }

@@ -20,7 +20,7 @@ function App() {
 		<Provider store={store}>
             <Router>
                 <Switch>
-                    <Route path='/:loja' exact={true} component={(props) => <Core props={props} content={'bopis'}/>}></Route>
+                    <Route path='/:loja' exact={true} component={(props) => <Core props={props} content={'loja'}/>}></Route>
                 </Switch>
             </Router>
         </Provider>
